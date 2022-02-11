@@ -132,10 +132,10 @@ Check out the directory `PAPipe/params/` containing example parameter files
         [path to bam file]/[Abreed_Abreed1].recal.addRG.marked.sort.bam
         <Abreed_Abreed2>
         [path to bam file]/[Abreed_Abreed2].recal.addRG.marked.sort.bam
-        <Bbreed_Breed1>
-        [path to bam file]/[Bbreed_Breed1].recal.addRG.marked.sort.bam
-        <Bbreed_Breed2>
-        [path to bam file]/[Bbreed_Breed2].recal.addRG.marked.sort.bam
+        <Bbreed_BBreed1>
+        [path to bam file]/[Bbreed_BBreed1].recal.addRG.marked.sort.bam
+        <Bbreed_BBreed2>
+        [path to bam file]/[Bbreed_BBreed2].recal.addRG.marked.sort.bam
         ```
         
     3. **`main_input_03.txt`:**  Input for PAPipe running from Format converting or data filtering step (Variant call VCF, Alignment BAM for PSMC analysis)
@@ -159,10 +159,10 @@ Check out the directory `PAPipe/params/` containing example parameter files
         [path to bam file]/[Abreed_Abreed1].recal.addRG.marked.sort.bam
         <Abreed_Abreed2>
         [path to bam file]/[Abreed_Abreed2].recal.addRG.marked.sort.bam
-        <Bbreed_Breed1>
-        [path to bam file]/[Bbreed_Breed1].recal.addRG.marked.sort.bam
-        <Bbreed_Breed2>
-        [path to bam file]/[Bbreed_Breed2].recal.addRG.marked.sort.bam
+        <Bbreed_BBreed1>
+        [path to bam file]/[Bbreed_BBreed1].recal.addRG.marked.sort.bam
+        <Bbreed_BBreed2>
+        [path to bam file]/[Bbreed_BBreed2].recal.addRG.marked.sort.bam
         ```
         
     4. **`main_input_04.txt`:**  Input for PAPipe running Population analysis (Variant VCF, directory containing converted files (HAPMAP, PLINK),Alignment BAM for PSMC analysis )
@@ -180,10 +180,10 @@ Check out the directory `PAPipe/params/` containing example parameter files
         [path to bam file]/[Abreed_Abreed1].recal.addRG.marked.sort.bam
         <Abreed_Abreed2>
         [path to bam file]/[Abreed_Abreed2].recal.addRG.marked.sort.bam
-        <Bbreed_Breed1>
-        [path to bam file]/[Bbreed_Breed1].recal.addRG.marked.sort.bam
-        <Bbreed_Breed2>
-        [path to bam file]/[Bbreed_Breed2].recal.addRG.marked.sort.bam
+        <Bbreed_BBreed1>
+        [path to bam file]/[Bbreed_BBreed1].recal.addRG.marked.sort.bam
+        <Bbreed_BBreed2>
+        [path to bam file]/[Bbreed_BBreed2].recal.addRG.marked.sort.bam
         
         ### Vcf ###
         ## Path of vcf file
@@ -196,7 +196,7 @@ Check out the directory `PAPipe/params/` containing example parameter files
         
         ```
         
-2. main_param.txt (containing parameters for all steps)\
+2. main_param.txt (containing parameters for all steps)
     1. **`main_param.txt`** 
         
 	
@@ -275,8 +275,10 @@ Results from all steps
 2. Variant Calling (VCF)
     
     ```python
-    #Variant call generated using all population sequencing data 
-    - 02_VariantCalling/VariantCalling/All.variant.combined.g.vcf.gz
+    #Variant call generated using all population sequencing data (names are slight different for Variant calling option)
+    - GATK3, Option=1: 02_VariantCalling/VariantCalling/All.variant.combined.GT.SNP.flt.vcf
+    - GATK4, Option=2: 02_VariantCalling/VariantCalling/All.variant.combined.g.vcf.gz
+    - SAMtools, Option=3: 02_VariantCalling/VariantCalling/All.variant.flt.SNP.vcf.recode.vcf
     ```
     
 3. Postprocessing
@@ -297,8 +299,8 @@ Results from all steps
         
         ```
         #STRUCTURE results per K in PNG files and all STRUCTURE results in a single PDF file
-        - 04_Population/STRUCTURE/CLUMPAK/K=[n].MajorCluster.png        
-        - 04_Population/STRUCTURE/CLUMPAK/pipeline_summary.pdf
+        - 04_Population/Structure/CLUMPAK/K=[n].MajorCluster.png        
+        - 04_Population/Structure/CLUMPAK/[job_100]_pipeline_summary.pdf
         ```
         
     2. Fixation index analysis
@@ -312,20 +314,20 @@ Results from all steps
         
         ```
         #Estimated LD values
-        - 04_Population/LD/[maximum distance parameter]/Plot/out.[population name]
+        - 04_Population/LdDecay/[maximum distance parameter]/[population name].stat.gz
         
         #LD decay plot
-        - 04_Population/LD/[maximum distance parameter]/Plot/Rplots.pdf
+        - 04_Population/LdDecay/[maximum distance parameter]/Plot/out.pdf
         ```
         
     4. Population admixture analysis
         
         ```
         #Admixture analysis results from all available combinations generated to estimate each statistics
-        - 04_Population/ADMIXTOOLS/admixtools_3pop/result.out
-        - 04_Population/ADMIXTOOLS/admixtools_4diff/result.out
-        - 04_Population/ADMIXTOOLS/admixtools_f4stat/result.out        
-        - 04_Population/ADMIXTOOLS/admixtools_Dstat/result.out
+        - 04_Population/AdmixtureProportion/admixtools_3pop/3pop.out
+        - 04_Population/AdmixtureProportion/admixtools_4diff/4diff.out
+        - 04_Population/AdmixtureProportion/admixtools_f4stat/f4stat.out        
+        - 04_Population/AdmixtureProportion/admixtools_Dstat/Dstat.out
         ```
         
     5. PCA
@@ -342,11 +344,11 @@ Results from all steps
         
         ```
         #NEWICK formatted phylogenetic tree
-        - 04_Population/SNPhylo/snphylo.ml.txt
+        - 04_Population/PhylogeneticTree/snphylo.ml.txt
         
         #Two figures of different visualization type of phylogenetic tree
-        - 04_Population/SNPhylo/snphylo_tree.pdf #rooted tree
-        - 04_Population/SNPhylo/Rplots.pdf #unrooted tree
+        - 04_Population/PhylogeneticTree/snphylo_tree.pdf #rooted tree
+        - 04_Population/PhylogeneticTree/Rplots.pdf #unrooted tree
         ```
         
     7. Effective Size estimation
@@ -360,7 +362,9 @@ Results from all steps
 - Running PAPipe-Variant calling with GATK3 (Variant calling OPTION = 1), parameter-given dbSNP file should be sorted vcf format.
 	```
 	gzip -d ./dbSNP.vcf.gz
-	bcftools sort ./dbSNP.vcf > ./dbSNP.sorted.vcf
+	grep "^#" dbSNP.vcf > header
+	grep -v "^#" dbSNP.vcf |sort -k1,1 | cat header - > dbSNP.sorted.vcf
+	
 	```
 
 
@@ -376,7 +380,7 @@ Results from all steps
     - Command
     
     ```python
-    bin/main.py -P ./main_param.txt -I ./main_input_pre.txt -A ./main_sample.txt -V 1 -J 8 &> logs
+    bin/main.py -P ./main_param.txt -I ./main_input_01.txt -A ./main_sample.txt -V 1 -J 8 &> logs
     ```
     
     - see `example/main_input_01.txt`
