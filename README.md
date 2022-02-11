@@ -1,23 +1,18 @@
-## PopPipe
 
-
+## PAPipe
 
  A comprehensive pipeline for population genetic analysis containing Read mapping, Variant calling, and Population genetic analysis
 
-![fig1.png](./figure/fig1.png)
+![fig1.png](figure/fig1.png)
 
-### Install PopPipe
-
-
+### Install PAPipe
 
 ```
 1. Download source 
-	$ git clone https://github.com/jkimlab/PopPipe.git
+	$ git clone https://github.com/jkimlab/PAPipe.git
 ```
 
-### Install PopPipe using Docker
-
-
+### Install PAPipe using Docker
 
 ```
 1. Install docker (https://docs.docker.com/install/linux/docker-ce/ubuntu)
@@ -25,25 +20,74 @@
     sudo usermod -aG docker $USER 	# adding user to the “docker” group
 
 2. Download source
-  git clone https://github.com/jkimlab/PopPipe.git
+  git clone https://github.com/jkimlab/PAPipe.git
   
 3. Build image using Dockerfile 
-  - Change to the directory where Dockerfile is located (PopPipe/docker/)
+  - Change to the directory where Dockerfile is located (PAPipe/Dockerfile)
     docker build -t [docker image name] ./ &> log_image_build
 
-4. Run by docker
+4. Run PAPipe by docker
   - Run image and create container
     docker run -v [Local directory containing data]:[Path of connecting directory on container] -it [docker image name]
 ```
 
+### Run PAPipe
+
+```
+-----------------Start-----------------
+usage: main.py [-h] -P PARAM -I INPUT [-A SAMPLE] [-O OUT] [-J JOB] [-S STEP]
+               [-V VERBOSE] [-T THREADS] [-M MEMORY]
+
+Pipeline of population analysis
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -P PARAM, --param PARAM
+                        <Path> Parameter file
+  -I INPUT, --input INPUT
+                        <Path> Input file
+  -A SAMPLE, --sample SAMPLE
+                        <Path> Sample file
+  -O OUT, --out OUT     <Path> Output directory (default current directory)
+  -J JOB, --job JOB     <Int> The number of jobs to process at one time
+                        (default 1)
+  -S STEP, --step STEP  <Str> Select the steps you want up to 1-4 (default
+                        1-4)
+  -V VERBOSE, --verbose VERBOSE
+                        <Int> If you want to see command line, set 1 (default
+                        0)
+  -T THREADS, --threads THREADS
+                        <Int> Threads number of cores (default 5)
+  -M MEMORY, --memory MEMORY
+                        <Int> Memory allocation (default 10)
+```
+
+Parameters for run `main.py`
+Select sub-pipes to run with -S parameter, (1: Read mapping, 2: Variant calling, 3: Filtering and format converting, 4: Population analysis)
+
+```python
+#run all steps (Default -S parameter : 1-4, Read mapping -> Variant calling -> Filtering and format converting -> Population analysis)
+bin/main.py -P ./main_param.txt -I ./main_input_01.txt -A ./main_sample.txt -V 1 -J 8 &> logs
+
+#run three sub steps from Variant calling (Variant calling -> Filtering and format converting -> Population analysis)
+bin/main.py -P ./main_param.txt -I ./main_input_02.txt -A ./main_sample.txt -V 1 -J 8 -S 2-4 &> 02.logs
+
+#run two sub steps from Filtering and format converting (Filtering and format converting -> Population analysis)
+bin/main.py -P ./main_param.txt -I ./main_input_03.txt -A ./main_sample.txt -V 1 -J 8 -S 3-4 &> 03.logs
+
+#run only Population analysis
+bin/main.py -P ./main_param.txt -I ./main_input_04.txt -A ./main_sample.txt -V 1 -J 8 -S 4 &> 04.logs
+```
+
 ### Prepare parameter files
 
+Check out the directory `PAPipe/params/` containing example parameter files
 
-
-Check out the directory `./params/` containing example parameter files
-
-1. Input files
-    1. Input for read mapping (main_input_01.txt)
+1. main_input_00.txt (01~04 for running PAPipe from different steps)
+    
+    Except for the case of running from the Read mapping step, using [main_input_01.txt], PAPipe automatically generates link of the files given through the rest of the input files to connect the user-data into PAPipe [main_input_02,03,04.txt] 
+    
+    1. **`main_input_01.txt`:**  Input for PAPipe running from Read mapping step (WGS sequence FASTQ)
         
         ```
         #===================================================================#
@@ -73,7 +117,7 @@ Check out the directory `./params/` containing example parameter files
         [path to sequencing read]/[sequencing read]-2.fq.gz
         ```
         
-    2. Input for variant calling (main_input_02.txt)
+    2. **`main_input_02.txt`:**  Input for PAPipe running from Variant calling step (Alignment BAM)
         
         ```
         #==================================================================#
@@ -94,7 +138,7 @@ Check out the directory `./params/` containing example parameter files
         [path to bam file]/[Bbreed_Breed2].recal.addRG.marked.sort.bam
         ```
         
-    3. Input for postprocessing (Format converting or data filtering step, main_input_03.txt)
+    3. **`main_input_03.txt`:**  Input for PAPipe running from Format converting or data filtering step (Variant call VCF, Alignment BAM for PSMC analysis)
         
         ```
         #==================================================================#
@@ -121,14 +165,13 @@ Check out the directory `./params/` containing example parameter files
         [path to bam file]/[Bbreed_Breed2].recal.addRG.marked.sort.bam
         ```
         
-    4. Input for Population analysis (main_input_04.txt)
+    4. **`main_input_04.txt`:**  Input for PAPipe running Population analysis (Variant VCF, directory containing converted files (HAPMAP, PLINK),Alignment BAM for PSMC analysis )
         
         ```
         #==================================================================#
         #                  Input file for Population step                  #
         #==================================================================#
         
-        #### If you take the Effective size step in Population analysis, write the BAM files path ####
         #### Population ####
         ### BAM ###
         ## <Hanwoo_Hanwoo1> => RGSM name (Before read grouping in ReadMapping step, format:(BreedName)_(BreedName)(Number), example : Hanwoo_Hanwoo1)
@@ -153,29 +196,62 @@ Check out the directory `./params/` containing example parameter files
         
         ```
         
-2. Parameter file (main_param.txt)
-    - There is a fixed parameter file for runDocker environment
-    
-    ```python
-    #=======================================================================#
-    #                   parameter file for Population pipeline              #
-    #=======================================================================#
-    
-    #==================================================#
-    ####                 ReadMapping                ####
-    #==================================================#
-    ### Program path ###
-    ## Write 'OPTION = 1' if you want to use the BWA tool in Mapping step
-    ## Write 'OPTION = 2' if you want to use the Bowtie2 tool in Mapping step
-    
-    OPTION = 1
-    BWA = [program path]/bwa
-    BOWTIE2 = [program path]/bowtie2
-    SAMTOOLS = [program path]/samtools
-    PICARD = [program path]/picard.jar
-    ```
-    
-3. Sample file (main_sample.txt)
+2. main_param.txt (containing parameters for all steps)\
+    1. **`main_param.txt`** 
+        
+        ```
+        #=======================================================================#
+        #                   parameter file for Population pipeline              #
+        #=======================================================================#
+        
+        #==================================================#
+        ####                 ReadMapping                ####
+        #==================================================#
+        ### Program path ###
+        ## Write 'OPTION = 1' if you want to use the BWA tool in Mapping step
+        ## Write 'OPTION = 2' if you want to use the Bowtie2 tool in Mapping step
+        
+        OPTION = 1
+        BWA = [program path]/bwa
+        BOWTIE2 = [program path]/bowtie2
+        SAMTOOLS = [program path]/samtools
+        PICARD = [program path]/picard.jar
+	#==================================================#
+	####               VariantCalling               ####
+	#==================================================#
+	### Program path ###
+	## Write 'OPTION = 1' if you want to use the GATK3 in Variant calling step
+	## Write 'OPTION = 2' if you want to use the GATK4 in Variant calling step
+	## Write 'OPTION = 3' if you want to use the SAMTOOLS-BCFTOOLS in Variant calling step
+        ```
+	
+	
+        
+    2. **`main_param_docker.txt`** 
+        
+        There is a fixed parameter file for the Docker environment. User needs to modify 
+        
+        ```
+        #=======================================================================#
+        #                   parameter file for Population pipeline              #
+        #=======================================================================#
+        
+        #==================================================#
+        ####                 ReadMapping                ####
+        #==================================================#
+        ### Program path ###
+        ## Write 'OPTION = 1' if you want to use the BWA tool in Mapping step
+        ## Write 'OPTION = 2' if you want to use the Bowtie2 tool in Mapping step
+        
+        OPTION = 1
+        BWA = [program path]/bwa
+        BOWTIE2 = [program path]/bowtie2
+        SAMTOOLS = [program path]/samtools
+        PICARD = [program path]/picard.jar
+        ...
+        ```
+        
+3. main_sample.txt (Sample information for population analysis)
     
     ```python
     #sample sex[F, M, U, FemaleMale/U for none] population
@@ -184,31 +260,8 @@ Check out the directory `./params/` containing example parameter files
     BBreed1 U        Bbreed
     BBreed2 U        Bbreed
     ```
-    
 
-### Run PopPipe
-
-
-
-Parameters for run `main.py`
-
-```python
-#run all steps
-bin/main.py -P ./main_param.txt -I ./main_input_pre.txt -A ./main_sample.txt -V 1 -J 8 &> logs
-
-#from variant.vcf to population analysis results
-bin/main.py -P ./main_param.txt -I ./main_input_pre.txt -A ./main_sample.txt -V 1 -J 8 &> 02.logs
-
-#
-bin/main.py -P ./main_param.txt -I ./main_input_pre.txt -A ./main_sample.txt -V 1 -J 8 &> 03.logs
-
-#
-bin/main.py -P ./main_param.txt -I ./main_input_pre.txt -A ./main_sample.txt -V 1 -J 8 &> 04.logs
-```
-
-### PopPipe Results
-
-
+### PAPipe Results
 
 Results from all steps
 
@@ -303,10 +356,15 @@ Results from all steps
         - 04_Population/EffectiveSize/psmc_plot.pdf
         ```
         
+### NOTES
+- Running PAPipe-Variant calling with GATK3 (Variant calling OPTION = 1), parameter-given dbSNP file should be sorted vcf format.
+	```
+	gzip -d ./dbSNP.vcf.gz
+	bcftools sort ./dbSNP.vcf > ./dbSNP.sorted.vcf
+	```
 
-### Run PopPipe for making the results
 
-
+### Run PAPipe for making the results
 
 - DATA
     - Four cattle population (Jersey, Simmental, Angus, Holstein from NCBI SRA, PRJNA238491, DOI: [10.1038/ng.3034](https://doi.org/10.1038/ng.3034))
@@ -314,7 +372,7 @@ Results from all steps
 - Quality Control
     - IlluQC ([https://doi.org/10.1371/journal.pone.0030619](https://doi.org/10.1371/journal.pone.0030619))
     - TrimGalore ([https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/](https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/))
-- Run PopPipe
+- Run PAPipe
     - Command
     
     ```python
@@ -325,14 +383,10 @@ Results from all steps
     - see `example/main_sample.txt`
     - see `example/main_param.txt`
 
-### **Included third party tools**
-
-
+### **Included third-party tools**
 
 See `Requirements/ThirdPartyTools.txt`
 
 ### Contact
-
-
 
 [bioinfolabkr@gmail.com](mailto:bioinfolabkr@gmail.com)
