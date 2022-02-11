@@ -28,7 +28,7 @@
 
 4. Run PAPipe by docker
   - Run image and create container
-    docker run -v [Local directory containing data]:[Path of connecting directory on container] -it [docker image name]
+    docker run -v [Local directory containing input data]:[Path of directory connecting directory on container] -it [docker image name]
 ```
 
 ### Run PAPipe
@@ -199,36 +199,37 @@ Check out the directory `PAPipe/params/` containing example parameter files
 2. main_param.txt (containing parameters for all steps)\
     1. **`main_param.txt`** 
         
-	```
-	#=======================================================================#
-	#                   parameter file for Population pipeline              #
-	#=======================================================================#
+	
+		```
+		#=======================================================================#
+		#                   parameter file for Population pipeline              #
+		#=======================================================================#
 
-	#==================================================#
-	####                 ReadMapping                ####
-	#==================================================#
-	### Program path ###
-	## Write 'OPTION = 1' if you want to use the BWA tool in Mapping step
-	## Write 'OPTION = 2' if you want to use the Bowtie2 tool in Mapping step
+		#==================================================#
+		####                 ReadMapping                ####
+		#==================================================#
+		### Program path ###
+		## Write 'OPTION = 1' if you want to use the BWA tool in Mapping step
+		## Write 'OPTION = 2' if you want to use the Bowtie2 tool in Mapping step
 
-	OPTION = 1
-	BWA = [program path]/bwa
-	BOWTIE2 = [program path]/bowtie2
-	SAMTOOLS = [program path]/samtools
-	PICARD = [program path]/picard.jar
-	...
-	#==================================================#
-	####               VariantCalling               ####
-	#==================================================#
-	### Program path ###
-	## Write 'OPTION = 1' if you want to use the GATK3 in Variant calling step
-	## Write 'OPTION = 2' if you want to use the GATK4 in Variant calling step
-	## Write 'OPTION = 3' if you want to use the SAMTOOLS-BCFTOOLS in Variant calling step
-	```
+		OPTION = 1
+		BWA = [program path]/bwa
+		BOWTIE2 = [program path]/bowtie2
+		SAMTOOLS = [program path]/samtools
+		PICARD = [program path]/picard.jar
+		...
+		#==================================================#
+		####               VariantCalling               ####
+		#==================================================#
+		### Program path ###
+		## Write 'OPTION = 1' if you want to use the GATK3 in Variant calling step
+		## Write 'OPTION = 2' if you want to use the GATK4 in Variant calling step
+		## Write 'OPTION = 3' if you want to use the SAMTOOLS-BCFTOOLS in Variant calling step
+		```
         
     2. **`main_param_docker.txt`** 
         
-        There is a fixed parameter file for the Docker environment. User needs to modify 
+        There is a fixed parameter file for the Docker environment. User needs to fill in the blank parameters
         
         ```
         #=======================================================================#
