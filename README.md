@@ -132,10 +132,10 @@ Check out the directory `PAPipe/params/` containing example parameter files
         [path to bam file]/[Abreed_Abreed1].recal.addRG.marked.sort.bam
         <Abreed_Abreed2>
         [path to bam file]/[Abreed_Abreed2].recal.addRG.marked.sort.bam
-        <Bbreed_BBreed1>
-        [path to bam file]/[Bbreed_BBreed1].recal.addRG.marked.sort.bam
-        <Bbreed_BBreed2>
-        [path to bam file]/[Bbreed_BBreed2].recal.addRG.marked.sort.bam
+        <Bbreed_Bbreed1>
+        [path to bam file]/[Bbreed_Bbreed1].recal.addRG.marked.sort.bam
+        <Bbreed_Bbreed2>
+        [path to bam file]/[Bbreed_Bbreed2].recal.addRG.marked.sort.bam
         ```
         
     3. **`main_input_03.txt`:**  Input for PAPipe running from Format converting or data filtering step (Variant call VCF, Alignment BAM for PSMC analysis)
@@ -159,10 +159,10 @@ Check out the directory `PAPipe/params/` containing example parameter files
         [path to bam file]/[Abreed_Abreed1].recal.addRG.marked.sort.bam
         <Abreed_Abreed2>
         [path to bam file]/[Abreed_Abreed2].recal.addRG.marked.sort.bam
-        <Bbreed_BBreed1>
-        [path to bam file]/[Bbreed_BBreed1].recal.addRG.marked.sort.bam
-        <Bbreed_BBreed2>
-        [path to bam file]/[Bbreed_BBreed2].recal.addRG.marked.sort.bam
+        <Bbreed_Bbreed1>
+        [path to bam file]/[Bbreed_Bbreed1].recal.addRG.marked.sort.bam
+        <Bbreed_Bbreed2>
+        [path to bam file]/[Bbreed_Bbreed2].recal.addRG.marked.sort.bam
         ```
         
     4. **`main_input_04.txt`:**  Input for PAPipe running Population analysis (Variant VCF, directory containing converted files (HAPMAP, PLINK),Alignment BAM for PSMC analysis )
@@ -180,10 +180,10 @@ Check out the directory `PAPipe/params/` containing example parameter files
         [path to bam file]/[Abreed_Abreed1].recal.addRG.marked.sort.bam
         <Abreed_Abreed2>
         [path to bam file]/[Abreed_Abreed2].recal.addRG.marked.sort.bam
-        <Bbreed_BBreed1>
-        [path to bam file]/[Bbreed_BBreed1].recal.addRG.marked.sort.bam
-        <Bbreed_BBreed2>
-        [path to bam file]/[Bbreed_BBreed2].recal.addRG.marked.sort.bam
+        <Bbreed_Bbreed1>
+        [path to bam file]/[Bbreed_Bbreed1].recal.addRG.marked.sort.bam
+        <Bbreed_Bbreed2>
+        [path to bam file]/[Bbreed_Bbreed2].recal.addRG.marked.sort.bam
         
         ### Vcf ###
         ## Path of vcf file
@@ -277,7 +277,7 @@ Results from all steps
     ```python
     #Variant call generated using all population sequencing data (names are slight different for Variant calling option)
     - GATK3, Option=1: 02_VariantCalling/VariantCalling/All.variant.combined.GT.SNP.flt.vcf
-    - GATK4, Option=2: 02_VariantCalling/VariantCalling/All.variant.combined.g.vcf.gz
+    - GATK4, Option=2: 02_VariantCalling/VariantCalling/All.variant.combined.GT.SNP.flt.vcf.gz
     - SAMtools, Option=3: 02_VariantCalling/VariantCalling/All.variant.flt.SNP.vcf.recode.vcf
     ```
     
@@ -285,7 +285,7 @@ Results from all steps
     
     ```
     #Various formatted variant call data 
-    - 03_Postprocessing/Hapmap/variant.combined.GT.SNP.flt.hapmap
+    - 03_Postprocessing/Hapmap/[vcf prefix].hapmap
     - 03_Postprocessing/plink/[prefix].bed
     - 03_Postprocessing/plink/[prefix].bim
     - 03_Postprocessing/plink/[prefix].fam
@@ -363,7 +363,7 @@ Results from all steps
 	```
 	gzip -d ./dbSNP.vcf.gz
 	grep "^#" dbSNP.vcf > header
-	grep -v "^#" dbSNP.vcf |sort -k1,1 | cat header - > dbSNP.sorted.vcf
+	grep -v "^#" dbSNP.vcf | sort- k1,1 -k2,2n | cat header - > dbSNP.sorted.vcf
 	
 	```
 
