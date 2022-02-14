@@ -255,10 +255,10 @@ Check out the directory `PAPipe/params/` containing example parameter files
     
     ```python
     #sample sex[F, M, U, FemaleMale/U for none] population
-    ABreed1 U        Abreed
-    ABreed2 U        Abreed
-    BBreed1 U        Bbreed
-    BBreed2 U        Bbreed
+    Abreed1 U        Abreed
+    Abreed2 U        Abreed
+    Bbreed1 U        Bbreed
+    Bbreed2 U        Bbreed
     ```
 
 ### PAPipe Results
