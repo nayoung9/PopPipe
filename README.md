@@ -198,7 +198,6 @@ Check out the directory `PAPipe/params/` containing example parameter files
         
 2. main_param.txt (containing parameters for all steps)
     1. **`main_param.txt`** 
-        
 	
 		```
 		#=======================================================================#
@@ -226,7 +225,15 @@ Check out the directory `PAPipe/params/` containing example parameter files
 		## Write 'OPTION = 2' if you want to use the GATK4 in Variant calling step
 		## Write 'OPTION = 3' if you want to use the SAMTOOLS-BCFTOOLS in Variant calling step
 		```
-        
+        	
+	- You can run `setup.py` to set up main_param.txt with required third-party programs if they exists in your local environment.
+		```
+		bash PAPipe/bin/setup.py
+		
+		 # Main_param_setup.txt file was generated(at where you executed setup.py).
+		 # Program path parameters are filled if it is in local.
+		```
+	
     2. **`main_param_docker.txt`** 
         
         There is a fixed parameter file for the Docker environment. User needs to fill in the blank parameters
