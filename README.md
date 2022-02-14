@@ -228,7 +228,7 @@ Check out the directory `PAPipe/params/` containing example parameter files
         	
 	- You can run `setup.py` to set up main_param.txt with required third-party programs if they exists in your local environment.
 		```
-		bash PAPipe/bin/setup.py
+		[PAPipe]/bin/setup.py
 		
 		 # Main_param_setup.txt file was generated(at where you executed setup.py).
 		 # Program path parameters are filled if it is in local.
